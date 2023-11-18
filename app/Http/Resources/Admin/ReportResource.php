@@ -15,7 +15,7 @@ class ReportResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'month'             => (string) $this?->month,
+            'month'             => (int) $this?->month,
             'year'              => (int) $this?->year,
             'paid'              => (float) $this?->paid,
             'outstanding'       => (float) $this?->outstanding,

@@ -23,7 +23,7 @@ class TransactionController extends Controller
     {
         $this->authorize('viewAny', Transaction::class);
 
-        $transactions = Transaction::with('payments')->paginate(10);
+        $transactions = Transaction::with(['payments','user'])->paginate(10);
 
         return $this->success('Transaction list',TransactionResource::collection($transactions));
     }

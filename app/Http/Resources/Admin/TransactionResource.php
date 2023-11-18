@@ -17,11 +17,12 @@ class TransactionResource extends JsonResource
         return [
             'id'                => (int) $this?->id,
             'amount'            => (float) $this?->amount,
-            'payer'             => (int) $this?->payer,
+            'payer'             => new UserResource($this?->user),
             'due_on'            => (string) $this?->due_on,
             'vat'               => (float) $this?->vat,
             'is_vat_inclusive'  => (bool) $this?->is_vat_inclusive,
             'status'            => (string) $this?->status,
+            'total'             => (float) $this?->total,
             'payments'          => PaymentResource::collection($this?->payments),
         ];
     }

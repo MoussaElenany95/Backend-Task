@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Transactions\FilterTransactionRequest;
 use App\Http\Resources\Admin\ReportResource;
 use App\Support\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
@@ -15,7 +16,7 @@ class ReportContoller extends Controller
      * Generate report  
      * @return JsonResponse
      */
-    public function __invoke(): JsonResponse
+    public function __invoke(FilterTransactionRequest $request): JsonResponse
     {
         $this->authorize('generate-report');
 
@@ -28,8 +29,11 @@ class ReportContoller extends Controller
                 DB::raw('SUM(CASE WHEN transactions.due_on > NOW() THEN (CASE WHEN transactions.is_vat_inclusive THEN transactions.amount + (transactions.amount*transactions.vat/100) ELSE transactions.amount END) - IFNULL(payments.total_paid, 0) ELSE 0 END) as outstanding'),
                 DB::raw('SUM(CASE WHEN transactions.due_on <= NOW() THEN (CASE WHEN transactions.is_vat_inclusive THEN transactions.amount + (transactions.amount*transactions.vat/100) ELSE transactions.amount END) - IFNULL(payments.total_paid, 0) ELSE 0 END) as overdue')
             )
+            ->when($request->start_date, fn ($query) => $query->whereDate('transactions.created_at', '>=', $request->start_date))
+            ->when($request->end_date, fn ($query) => $query->whereDate('transactions.created_at', '<=', $request->end_date))
             ->groupBy('month', 'year')
             ->get();
+
 
         return $this->success('Report generated',ReportResource::collection($transactions));
 

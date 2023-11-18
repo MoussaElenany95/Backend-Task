@@ -14,6 +14,7 @@ class TransactionController extends Controller
     /**
      * get all transactions
      * @param Request $request
+     * @return JsonResponse
      */
     public function index(Request $request): JsonResponse
     {
@@ -25,4 +26,5 @@ class TransactionController extends Controller
         // return response
         return $this->success('Transaction list', TransactionResource::collection($transactions));
     }
+
 }

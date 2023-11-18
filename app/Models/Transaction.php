@@ -29,7 +29,7 @@ class Transaction extends Model
         return Attribute::make(
             // get the value
             get: function($value){
-                return $this->is_vat_inclusive ? $this->amount : $this->amount + ($this->amount * $this->vat);
+                return !$this->is_vat_inclusive ? $this->amount : $this->amount + ($this->amount * $this->vat/100);
             },
         );
     }
@@ -44,7 +44,6 @@ class Transaction extends Model
             get: function($value){
                 $paid  = $this->payments->sum('amount');
                 $total = $this->total; 
-
                 if($paid == $total){
                     return "Paid";
                 }
@@ -61,9 +60,9 @@ class Transaction extends Model
      * Get the payer that owns the Transaction
      * @return BelongsTo
      * */
-    public function payer(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'payer');
     }
 
     /**

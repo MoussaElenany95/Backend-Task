@@ -45,6 +45,8 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+
+
     /**
      * Get the transactions for the user.
      * @return HasMany

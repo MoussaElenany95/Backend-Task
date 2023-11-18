@@ -20,6 +20,7 @@ class TransactionResource extends JsonResource
             'due_on'            => (string) $this?->due_on,
             'vat'               => (float) $this?->vat,
             'is_vat_inclusive'  => (bool) $this?->is_vat_inclusive,
+            'total'             => (float) $this?->total,
             'status'            => (string) $this?->status,
             'payments'          => PaymentResource::collection($this?->payments),
         ];
