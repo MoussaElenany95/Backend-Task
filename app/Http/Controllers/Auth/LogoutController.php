@@ -19,14 +19,15 @@ class LogoutController extends Controller
      */
     public function __invoke(Request $request): JsonResponse
     {
-        // delete token
-        $request->user()->currentAccessToken()->delete();
+        
+        $user = auth()->user();
 
-       // logout from session if it exists
-        if ($request->hasSession()) {
-            Auth::logout();
-            $request->session()->invalidate();
+        if($request->expectsJson()){
+            $user->currentAccessToken()->delete();
+        }else{
+            Auth::guard('web')->logout();
         }
+
         return $this->success('Logout success');
     }
 }

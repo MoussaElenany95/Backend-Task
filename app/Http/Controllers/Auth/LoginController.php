@@ -40,7 +40,6 @@ class LoginController extends Controller
         // create token for user
         $token = $user->createToken('auth_token')->plainTextToken;
         Auth::login($user);
-        
         // return response with token and user data
         return $this->response(
             'Login success', 
