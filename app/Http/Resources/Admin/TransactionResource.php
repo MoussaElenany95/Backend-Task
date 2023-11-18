@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -21,6 +21,8 @@ class TransactionResource extends JsonResource
             'due_on'            => (string) $this?->due_on,
             'vat'               => (float) $this?->vat,
             'is_vat_inclusive'  => (bool) $this?->is_vat_inclusive,
+            'status'            => (string) $this?->status,
+            'payments'          => PaymentResource::collection($this?->payments),
         ];
     }
 }

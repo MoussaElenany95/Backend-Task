@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Transactions\StoreTransactionRequest;
 use App\Http\Requests\Transactions\UpdateTransactionRequest;
-use App\Http\Resources\TransactionResource;
+use App\Http\Resources\Admin\TransactionResource;
 use App\Models\Transaction;
 use App\Support\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
@@ -23,7 +23,7 @@ class TransactionController extends Controller
     {
         $this->authorize('viewAny', Transaction::class);
 
-        $transactions = Transaction::paginate(10);
+        $transactions = Transaction::with('payments')->paginate(10);
 
         return $this->success('Transaction list',TransactionResource::collection($transactions));
     }
